@@ -19,43 +19,6 @@ class AdDetailView(DetailView):
         return JsonResponse({"status": "ok"}, status=200)
 
 
-class DataAds(View):  # заполнение БД данными из csv
-    def get(self, request):
-
-        data_location = pd.read_csv("location.csv", sep=",")
-        i = 0
-        while max(data_location["id"].keys()) >= i:
-            Location.objects.create(name=data_location["name"][i],
-                                    lat=data_location["lat"][i],
-                                    lng=data_location["lng"][i])
-            i += 1
-
-        data_user = pd.read_csv("user.csv", sep=",")
-        i = 0
-        while max(data_user["id"].keys()) >= i:
-            User.objects.create(first_name=data_user["first_name"][i], last_name=data_user["last_name"][i],
-                                username=data_user["username"][i], password=data_user["password"][i],
-                                role=data_user["role"][i], age=data_user["age"][i],
-                                location=data_location["location"][i])
-            i += 1
-
-        data_cat = pd.read_csv("categories.csv", sep=",")
-        i = 0
-        while max(data_cat["id"].keys()) >= i:
-            Categories.objects.create(name=data_cat["name"][i])
-            i += 1
-
-        data_ads = pd.read_csv("ads.csv", sep=",")
-
-        i = 0
-        while max(data_ads["Id"].keys()) >= i:
-            Ads.objects.create(name=data_ads["name"][i], author_id=data_user["id"][i], price=data_ads["price"][i],
-                               description=data_ads["description"][i], address=data_ads["address"][i],
-                               is_published=data_ads["is_published"][i], category_id=data_cat["id"])
-            i += 1
-        return JsonResponse("База заполнена", safe=False, status=200)
-
-
 @method_decorator(csrf_exempt, name='dispatch')
 class AdsView(ListView):
     model = Ads

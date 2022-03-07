@@ -22,7 +22,6 @@ from homework_27 import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.AdDetailView.as_view()),
-    path('ads/', views.DataAds.as_view()),
     path('ad/create/', views.AdsCreateView.as_view()),
     path('ad/<int:pk>/upload_image/', views.AdsImageView.as_view()),
     path('ad/', views.AdsView.as_view()),

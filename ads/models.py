@@ -45,13 +45,12 @@ class User(models.Model):
 
 class Ads(models.Model):
     name = models.CharField(max_length=100)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author_id = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=1000)
-    address = models.CharField(max_length=100)
-    is_published = models.BooleanField(default=False)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    is_published = models.BooleanField(default=False, null=True)
     image = models.ImageField(upload_to="ads/", null=True)
+    category_id = models.ForeignKey(Categories, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "Объявление"

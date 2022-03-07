@@ -10,7 +10,6 @@ from ads.models import Location, User, Ads
 from homework_27 import settings
 
 
-
 class UserDetailView(DetailView):
     model = User
 
@@ -131,4 +130,3 @@ class UserView(ListView):
             "num_pages": page_obj.paginator.num_pages
         }
         return JsonResponse(response)
-
