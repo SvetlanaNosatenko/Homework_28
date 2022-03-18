@@ -9,7 +9,7 @@
       "password": "gZvptL",
       "role": "member",
       "age": 21,
-      "location": 1
+      "locations": 1
     }
   },
  {
@@ -22,7 +22,7 @@
       "password": "4fVqL2",
       "role": "moderator",
       "age": 24,
-      "location": 3
+      "locations": 3
     }
  },
  {
@@ -35,7 +35,7 @@
    "password": "o535pj",
    "role": "admin",
    "age": 29,
-   "location": 8
+   "locations": 8
  }
  },
   {
@@ -48,7 +48,7 @@
       "password": "d49rSO",
       "role": "moderator",
       "age": 19,
-      "location": 10
+      "locations": 10
     }
   },
  {
@@ -61,7 +61,7 @@
    "password": "wCqlVE",
    "role": "member",
    "age": 41,
-   "location": 2
+   "locations": 2
  }
  },
  {
@@ -74,7 +74,7 @@
    "password": "xuR2jf",
    "role": "member",
    "age": 37,
-   "location": 4
+   "locations": 4
  }
  },
   {
@@ -87,7 +87,7 @@
       "password": "gzP4vR",
       "role": "member",
       "age": 26,
-      "location": 7
+      "locations": 7
     }
   },
   {
@@ -100,7 +100,7 @@
       "password": "zo0rj6",
       "role": "member",
       "age": 24,
-      "location": 5
+      "locations": 5
     }
   },
   {
@@ -113,7 +113,7 @@
       "password": "daMocL",
       "role": "moderator",
       "age": 22,
-      "location": 9
+      "locations": 9
     }
   },
  {
@@ -126,7 +126,7 @@
    "password": "sasha123456",
    "role": "member",
    "age": 35,
-   "location": 6
+   "locations": 6
  }
  }
    ]
