@@ -26,11 +26,17 @@ class Location(models.Model):
 
 
 class User(models.Model):
+    ROLES = [
+        ("member", "Пользователь"),
+        ("moderator", "Модератор"),
+        ("admin", "Админ"),
+    ]
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, choices=ROLES, default="member")
     age = models.IntegerField(blank=True, null=True)
     locations = models.ManyToManyField(Location)
 
@@ -46,11 +52,11 @@ class User(models.Model):
 class Ads(models.Model):
     name = models.CharField(max_length=100)
     author_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    price = models.IntegerField(blank=True, null=True)
+    price = models.PositiveIntegerField(blank=True, null=True)
     description = models.CharField(max_length=1000)
     is_published = models.BooleanField(default=False, null=True)
-    image = models.ImageField(upload_to="ads/", null=True)
-    category_id = models.ForeignKey(Categories, on_delete=models.CASCADE, default=False, null=False)
+    image = models.ImageField(upload_to="ad/", null=True, blank=True)
+    category_id = models.ForeignKey(Categories, on_delete=models.CASCADE, default=False, null=True)
 
     class Meta:
         verbose_name = "Объявление"

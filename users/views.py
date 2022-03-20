@@ -25,7 +25,7 @@ class UserDetailView(DetailView):
             "last_name": user.last_name,
             "role": user.role,
             "age": user.age,
-            "locations": list(map(str, user.locations.all()))
+            "locations": list(map(str, user.locations.all())),
         }
         )
 
@@ -37,7 +37,7 @@ class UserCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         user_data = json.loads(request.body)
-        user = Ads.objects.create(
+        user = User.objects.create(
             username=user_data["username"],
             password=user_data["password"],
             first_name=user_data["first_name"],
@@ -48,6 +48,7 @@ class UserCreateView(CreateView):
 
         for location in user_data["locations"]:
             locations, _ = Location.objects.get_or_create(name=location)
+            user.locations.add(locations)
 
         return JsonResponse({"id": user.id,
                              "username": user.username,
@@ -62,7 +63,7 @@ class UserCreateView(CreateView):
 @method_decorator(csrf_exempt, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
-    fields = ["username", "password", "first_name", "last_name", "role", "age", "locations"]
+    fields = ["username", "password", "first_name", "last_name", "age", "locations"]
 
     def patch(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
@@ -73,11 +74,11 @@ class UserUpdateView(UpdateView):
         self.object.password = user_data["password"],
         self.object.first_name = user_data["first_name"],
         self.object.last_name = user_data["last_name"],
-        self.object.role = user_data["role"],
         self.object.age = user_data["age"]
 
         for location in user_data["locations"]:
             locations, _ = Location.objects.get_or_create(name=location)
+            self.object.locations.add(locations)
 
         self.object.save()
         return JsonResponse({
@@ -85,7 +86,6 @@ class UserUpdateView(UpdateView):
             "username": self.object.username,
             "first_name": self.object.first_name,
             "last_name": self.object.last_name,
-            "role": self.object.role,
             "age": self.object.age,
             "locations": list(map(str, self.object.locations.all())),
         })
@@ -104,12 +104,13 @@ class UserDeleteView(DeleteView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserView(ListView):
-    models = User
+    model = User
     qs = User.objects.all()
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-        self.object_list = self.object_list.annotate(ads=Count("ads"))
+        self.object_list = self.object_list.annotate(total_ads=Count("ads"))
+
         paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
@@ -121,12 +122,12 @@ class UserView(ListView):
                           "last_name": user.last_name,
                           "role": user.role,
                           "age": user.age,
-                          "ads": user.ads,
-                          "locations": list(map(str, user.locations.all()))
+                          "total_ads": user.total_ads,
+                          "locations": list(map(str, user.locations.all())),
                           })
         response = {
             "items": users,
             "total": page_obj.paginator.count,
-            "num_pages": page_obj.paginator.num_pages
+            "num_pages": page_obj.paginator.num_pages,
         }
         return JsonResponse(response)
