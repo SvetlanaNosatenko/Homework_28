@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, DeleteView, UpdateView, ListView, CreateView
 
-from ads.models import Ads, Categories, Location, User
+from ads.models import Ads, Categories, User
 from homework_27 import settings
 
 
@@ -72,7 +72,7 @@ class AdsCreateView(CreateView):
                              "is_published": ads.is_published,
                              "category_id": ads.category_id_id,
                              "image": ads.image.url,
-                             })
+                             }, status=201)
 
 
 class AdsDetailView(DetailView):
@@ -155,7 +155,7 @@ class AdsDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         super().delete(request, *args, **kwargs)
 
-        return JsonResponse({"status": "ok"}, status=200)
+        return JsonResponse({"status": "ok"}, status=204)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -188,7 +188,7 @@ class CatCreateView(CreateView):
 
         return JsonResponse({"id": cat.id,
                              "name": cat.name,
-                             })
+                             }, status=201)
 
 
 class CatDetailView(DetailView):
@@ -212,7 +212,7 @@ class CatDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         super().delete(request, *args, **kwargs)
 
-        return JsonResponse({"status": "ok"}, status=200)
+        return JsonResponse({"status": "ok"}, status=204)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

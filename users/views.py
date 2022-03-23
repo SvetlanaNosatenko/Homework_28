@@ -1,12 +1,12 @@
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 import json
 
-from ads.models import Location, User, Ads
+from ads.models import Location, User
 from homework_27 import settings
 
 
@@ -57,7 +57,7 @@ class UserCreateView(CreateView):
                              "role": user.role,
                              "age": user.age,
                              "locations": list(map(str, user.locations.all())),
-                             })
+                             }, status=201)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -99,7 +99,7 @@ class UserDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         super().delete(request, *args, **kwargs)
 
-        return JsonResponse({"status": "ok"}, status=200)
+        return JsonResponse({"status": "ok"}, status=204)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -109,7 +109,7 @@ class UserView(ListView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-        self.object_list = self.object_list.annotate(total_ads=Count("ads"))
+        self.object_list = self.object_list.annotate(total_ads=Count("ads", ads__is_published=True))
 
         paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)
         page_number = request.GET.get("page")
